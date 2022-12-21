@@ -5,6 +5,7 @@ class Ship:
 
     def __init__(self, path):
         self.path = path
+        self.path.sort()
         self.x = 50.0
         self.y = 512.0 - 50.0
         self.xs = 0.0
@@ -32,16 +33,16 @@ class Ship:
     # Returns a value representing the fitness of the ship's current state.
     #   This function should be called once every frame after calling update, and the returned values should be summed
     #   to produce the total fitness of the ship's assigned path.
-    def get_fitness(self):
-        # TODO implement this
+    def get_current_fitness(self, delta, goal, asteroids):
+        fitness = 0.0
 
-        # TODO get asteroid and goal locations from a global value in main.py
+        for asteroid in asteroids:
+            if asteroid.isInside(self.x, self.y):
+                fitness -= 100000.0 * delta
 
-        # TODO return a really low value if the ship is currently intersecting an asteroid
+        if goal.isInside(self.x, self.y):
+            fitness += 1000.0 * delta
 
-        # TODO return a really high value if the ship is currently intersecting the goal
+        fitness += -(pow(self.x - goal.x, 2) + pow(self.y - goal.y, 2)) * delta
 
-        # TODO return a slightly higher value the closer the ship is to the goal, to give the evolutionary algorithm
-        #   a gradient to follow for learning
-
-        return 1.0
+        return fitness

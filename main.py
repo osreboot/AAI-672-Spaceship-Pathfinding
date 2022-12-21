@@ -1,4 +1,5 @@
 import painter
+from circle import Circle
 from display import *
 from ship import *
 from ga import *
@@ -10,15 +11,10 @@ from ga import *
 
 
 def update(delta):
-    global ship
-
     # Draw the world
-    painter.draw_goal(462, 50, 20)
-    painter.draw_asteroid(150, 200, 20)
-    painter.draw_asteroid(300, 200, 40)
-    painter.draw_asteroid(200, 450, 50)
-    painter.draw_asteroid(350, 300, 60)
-    painter.draw_asteroid(70, 80, 30)
+    painter.draw_goal(goal)
+    for asteroid in asteroids:
+        painter.draw_asteroid(asteroid)
 
     # Advance test ship for demonstration purposes
     ship.update(delta)
@@ -28,7 +24,7 @@ def update(delta):
 
 
 if __name__ == '__main__':
-    global ship
+    global ship, goal, asteroids
     # Creates a test ship with a test (preset) path
     #   Path is a 2D array where each element is [time in seconds, boost direction in degrees]
     #   Boosts are executed in order of increasing time values, with the same acceleration for all boosts.
@@ -37,7 +33,13 @@ if __name__ == '__main__':
                  [3.5, -100],
                  [1.5, 35]])
 
+    goal = Circle(462, 50, 20)
 
+    asteroids = [Circle(150, 200, 20),
+                 Circle(300, 200, 40),
+                 Circle(200, 450, 50),
+                 Circle(350, 300, 60),
+                 Circle(70, 80, 30)]
 
     #grid_size = 15
     #pop_size = 20

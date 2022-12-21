@@ -38,17 +38,17 @@ def draw_ship(ship):
     glPopMatrix()
 
 
-def draw_asteroid(x, y, r):
+def draw_asteroid(circle):
     glColor4f(0.5, 0.5, 0.5, 1.0)
     glBegin(GL_TRIANGLE_FAN)
     for d in range(0, 360, 10):
-        glVertex2f(x + cos(radians(d)) * r, y + sin(radians(d)) * r)
+        glVertex2f(circle.x + cos(radians(d)) * circle.r, circle.y + sin(radians(d)) * circle.r)
     glEnd()
 
 
-def draw_goal(x, y, r):
+def draw_goal(circle):
     glColor4f(0.5, 1.0, 0.5, 1.0)
     glBegin(GL_TRIANGLE_FAN)
     for d in range(0, 360, 10):
-        glVertex2f(x + cos(radians(d)) * r, y + sin(radians(d)) * r)
+        glVertex2f(circle.x + cos(radians(d)) * circle.r, circle.y + sin(radians(d)) * circle.r)
     glEnd()
