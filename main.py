@@ -1,6 +1,7 @@
 import painter
 from display import *
 from ship import *
+from ga import *
 
 
 # Uses: https://github.com/mcfletch/pyopengl
@@ -33,9 +34,17 @@ if __name__ == '__main__':
     #   Boosts are executed in order of increasing time values, with the same acceleration for all boosts.
     #   Boosts only apply acceleration, ship speed is cumulative (more realistic).
     ship = Ship([[0.0, -45],
-                 [2.5, -180],
-                 [4.5, 35]])
+                 [3.5, -100],
+                 [1.5, 35]])
 
+
+
+    #grid_size = 15
+    #pop_size = 20
+    #r = Ship(MyPoint(0, 0), MyPoint(10, 10), 32, None)
+    #ga = GA(chr_size = grid_size, talent_size = 3)
+    #g = ga.genPopulation(min = -5, max = 5,pop_size=pop_size)
+    
     # TODO implement the evolutionary algorithm here
     #
     #   The visualization is only for demonstration purposes and we probably shouldn't visualize every single ship.
