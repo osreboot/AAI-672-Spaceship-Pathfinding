@@ -1,11 +1,21 @@
+import copy
 from math import *
 
 
 class Ship:
 
     def __init__(self, path):
-        self.path = path
-        self.path.sort()
+        self.path = copy.deepcopy(path)
+        self.path.values.sort()
+        self.pathInit = copy.deepcopy(self.path)
+        self.x = 50.0
+        self.y = 512.0 - 50.0
+        self.xs = 0.0
+        self.ys = 0.0
+        self.dir = 0.0
+
+    def reset(self):
+        self.path = copy.deepcopy(self.pathInit)
         self.x = 50.0
         self.y = 512.0 - 50.0
         self.xs = 0.0
@@ -15,12 +25,12 @@ class Ship:
     # Advances the ship's speed, direction and location forward by delta (seconds)
     def update(self, delta):
         # Update the path timings
-        for n in self.path:
+        for n in self.path.values:
             n[0] -= delta
 
         # Update the ship's direction if a path node has reached time zero
-        while len(self.path) > 0 and self.path[0][0] <= 0:
-            self.dir = self.path.pop(0)[1]
+        while len(self.path.values) > 0 and self.path.values[0][0] <= 0:
+            self.dir = self.path.values.pop(0)[1]
 
         # Update the ship's speed
         self.xs += cos(radians(self.dir)) * 50.0 * delta
@@ -33,16 +43,23 @@ class Ship:
     # Returns a value representing the fitness of the ship's current state.
     #   This function should be called once every frame after calling update, and the returned values should be summed
     #   to produce the total fitness of the ship's assigned path.
-    def get_current_fitness(self, delta, goal, asteroids):
+    def getCurrentFitness(self, goal, asteroids):
         fitness = 0.0
 
+        # Being offscreen hurts
+        if not 0.0 < self.x < 512.0 or not 0.0 < self.y < 512.0:
+            fitness -= 100000000.0
+
+        # Asteroids hurt
         for asteroid in asteroids:
             if asteroid.isInside(self.x, self.y):
-                fitness -= 100000.0 * delta
+                fitness -= 100000000.0
 
+        # Reward for reaching the goal
         if goal.isInside(self.x, self.y):
-            fitness += 1000.0 * delta
+            fitness += 1000.0
 
-        fitness += -(pow(self.x - goal.x, 2) + pow(self.y - goal.y, 2)) * delta
+        # Being far from the goal hurts a tiny bit
+        fitness -= (pow(self.x - goal.x, 2) + pow(self.y - goal.y, 2)) * 0.001
 
         return fitness
