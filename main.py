@@ -47,7 +47,7 @@ if __name__ == '__main__':
     #             [3.5, -100],
     #             [1.5, 35]])
 
-    [start, goal, asteroids] = worlds.world_zigzag()
+    [start, goal, asteroids] = worlds.world_simple()
 
     #pop_size = 20
     #ga = GA(chr_size = grid_size)
@@ -75,11 +75,11 @@ if __name__ == '__main__':
     deltaSim = 1.0 / 20.0
 
     population = []
-    for i in range(20):
+    for i in range(50):
         population.append(Path(6))
     population = np.array(population)
 
-    for generation in range(500):
+    for generation in range(200):
         print("Generation ", generation, " =======================")
 
         # Calculate fitness values for all agents
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         # Cyclic crossover (each top agent has its own crossover batch further down the list)
         numParents = int(len(population) / 5)
         for i in range(numParents, len(population)):
-            population[i].crossover(population[int(len(population) / 5) + 1])
+            population[i].crossover(population[int(i / 5) - 2])
 
         # # Pairs crossover (1->2, 2->3, etc)
         # for i in range(len(population)):
