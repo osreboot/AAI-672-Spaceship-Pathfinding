@@ -14,27 +14,27 @@ from ga import *
 
 
 def update(delta):
-    global demoTimer, demoShip, goal, asteroids
+    global deltaSim, demoTimer, demoShip, goal, asteroids
 
     # Draw the world
     painter.draw_goal(goal)
     for asteroid in asteroids:
         painter.draw_asteroid(asteroid)
 
-    demoTimer += delta
+    demoTimer += deltaSim
     if demoTimer >= 10.0:
         demoTimer = 0.0
         demoShip.reset()
 
     # Advance test ship for demonstration purposes
-    demoShip.update(delta)
+    demoShip.update(deltaSim)
 
     # Draw the ship
     painter.draw_ship(demoShip)
 
 
 if __name__ == '__main__':
-    global demoTimer, demoShip, goal, asteroids
+    global deltaSim, demoTimer, demoShip, goal, asteroids
     # Creates a test ship with a test (preset) path
     #   Path is a 2D array where each element is [time in seconds, boost direction in degrees]
     #   Boosts are executed in order of increasing time values, with the same acceleration for all boosts.
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     #
     #   Lastly assign the main ship to visualize the best path after a bunch of generations!
 
-    simDelta = 1.0 / 20.0
+    deltaSim = 1.0 / 20.0
 
     population = []
     for i in range(20):
@@ -88,9 +88,9 @@ if __name__ == '__main__':
         fitness = np.zeros(len(population))
         for agentIndex in range(len(population)):
             ship = Ship(population[agentIndex])
-            for time in np.arange(0.0, 10.0, simDelta):
-                ship.update(simDelta)
-                fitness[agentIndex] += ship.getCurrentFitness(goal, asteroids) * simDelta
+            for time in np.arange(0.0, 10.0, deltaSim):
+                ship.update(deltaSim)
+                fitness[agentIndex] += ship.getCurrentFitness(goal, asteroids) * deltaSim
 
         # Sort population by fitness
         indices = (-fitness).argsort()
@@ -105,4 +105,4 @@ if __name__ == '__main__':
     demoShip = Ship(population[0])
 
     # Start the visualization program
-    Display(update, [512, 512], "Spaceship Pathfinding - Calvin Weaver / Abhishek Amberkar / Aakash Shukla")
+    Display(update, deltaSim, [512, 512], "Spaceship Pathfinding - Calvin Weaver / Abhishek Amberkar / Aakash Shukla")

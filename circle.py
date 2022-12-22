@@ -1,3 +1,5 @@
+import numpy as np
+
 
 class Circle:
 
@@ -6,5 +8,5 @@ class Circle:
         self.y = y
         self.r = r
 
-    def isInside(self, x, y):
-        return pow(self.x - x, 2) + pow(self.y - y, 2) <= self.r * self.r
+    def collidesWith(self, x, y, radius):
+        return np.sqrt(pow(self.x - x, 2) + pow(self.y - y, 2)) <= self.r + radius

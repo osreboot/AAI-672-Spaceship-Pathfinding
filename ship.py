@@ -5,6 +5,8 @@ from math import *
 class Ship:
 
     def __init__(self, path):
+        self.radius = 6.0
+
         self.path = copy.deepcopy(path)
         self.path.values.sort()
         self.pathInit = copy.deepcopy(self.path)
@@ -47,16 +49,17 @@ class Ship:
         fitness = 0.0
 
         # Being offscreen hurts
-        if not 0.0 < self.x < 512.0 or not 0.0 < self.y < 512.0:
+        if (not self.radius < self.x < 512.0 - self.radius or
+                not self.radius < self.y < 512.0 - self.radius):
             fitness -= 100000000.0
 
         # Asteroids hurt
         for asteroid in asteroids:
-            if asteroid.isInside(self.x, self.y):
+            if asteroid.collidesWith(self.x, self.y, self.radius):
                 fitness -= 100000000.0
 
         # Reward for reaching the goal
-        if goal.isInside(self.x, self.y):
+        if goal.collidesWith(self.x, self.y, self.radius):
             fitness += 1000.0
 
         # Being far from the goal hurts a tiny bit

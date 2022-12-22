@@ -6,8 +6,9 @@ from OpenGL.GLUT import *
 
 class Display:
 
-    def __init__(self, updateRef, size, title):
+    def __init__(self, updateRef, deltaMin, size, title):
         self.updateRef = updateRef
+        self.deltaMin = deltaMin
 
         # Initialize the window with GLUT
         glutInit()
@@ -31,7 +32,9 @@ class Display:
 
     def __update(self):
         # Calculate time since update was last called (in seconds)
-        delta = float(time_ns() - self.timeLastUpdate) / 1000000000.0
+        delta = 0.0
+        while delta < self.deltaMin:
+            delta = float(time_ns() - self.timeLastUpdate) / 1000000000.0
         self.timeLastUpdate = time_ns()
 
         # Prepare for rendering
