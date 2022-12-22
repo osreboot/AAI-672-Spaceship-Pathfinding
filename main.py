@@ -75,7 +75,7 @@ if __name__ == '__main__':
     deltaSim = 1.0 / 20.0
 
     population = []
-    for i in range(50):
+    for i in range(20):
         population.append(Path(6))
     population = np.array(population)
 

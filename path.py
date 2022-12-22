@@ -17,7 +17,7 @@ class Path:
         for i in indices:
             if np.random.uniform(0.0, 1.0) < 0.5:
                 self.values[i] = other.values[i]
-            if np.random.uniform(0.0, 1.0) < 0.2:
+            if np.random.uniform(0.0, 1.0) < 0.1:
                 self.values[i] = [
                     np.random.uniform(0.0, 10.0),  # Timing of maneuver
                     np.random.uniform(0.0, 360.0)  # Direction of burn
