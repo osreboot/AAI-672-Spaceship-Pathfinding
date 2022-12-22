@@ -102,7 +102,7 @@ if __name__ == '__main__':
         # Cyclic crossover (each top agent has its own crossover batch further down the list)
         numParents = int(len(population) / 5)
         for i in range(numParents, len(population)):
-            population[i].crossover(population[int(i / 5) - 2])
+            population[i].crossover(population[int((i - numParents) / 5)])
 
         # # Pairs crossover (1->2, 2->3, etc)
         # for i in range(len(population)):
