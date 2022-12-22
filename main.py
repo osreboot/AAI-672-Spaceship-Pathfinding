@@ -6,6 +6,7 @@ from display import *
 from path import Path
 from ship import *
 from ga import *
+import worlds
 
 
 # Uses: https://github.com/mcfletch/pyopengl
@@ -14,7 +15,7 @@ from ga import *
 
 
 def update(delta):
-    global deltaSim, demoTimer, demoShip, goal, asteroids
+    global deltaSim, demoTimer, demoShip, demoTrail, goal, asteroids
 
     # Draw the world
     painter.draw_goal(goal)
@@ -32,9 +33,12 @@ def update(delta):
     # Draw the ship
     painter.draw_ship(demoShip)
 
+    # Draw a ship trail
+    painter.draw_trail(demoTrail, int(demoTimer / deltaSim))
+
 
 if __name__ == '__main__':
-    global deltaSim, demoTimer, demoShip, goal, asteroids
+    global deltaSim, demoTimer, demoShip, demoTrail, start, goal, asteroids
     # Creates a test ship with a test (preset) path
     #   Path is a 2D array where each element is [time in seconds, boost direction in degrees]
     #   Boosts are executed in order of increasing time values, with the same acceleration for all boosts.
@@ -43,13 +47,7 @@ if __name__ == '__main__':
     #             [3.5, -100],
     #             [1.5, 35]])
 
-    goal = Circle(462, 200, 20)
-
-    asteroids = [Circle(150, 100, 20),
-                 Circle(300, 200, 40),
-                 Circle(200, 450, 50),
-                 Circle(350, 300, 60),
-                 Circle(70, 80, 30)]
+    [start, goal, asteroids] = worlds.world_zigzag()
 
     #pop_size = 20
     #ga = GA(chr_size = grid_size)
@@ -77,8 +75,8 @@ if __name__ == '__main__':
     deltaSim = 1.0 / 20.0
 
     population = []
-    for i in range(20):
-        population.append(Path(8))
+    for i in range(50):
+        population.append(Path(6))
     population = np.array(population)
 
     for generation in range(500):
@@ -87,7 +85,7 @@ if __name__ == '__main__':
         # Calculate fitness values for all agents
         fitness = np.zeros(len(population))
         for agentIndex in range(len(population)):
-            ship = Ship(population[agentIndex])
+            ship = Ship(start, population[agentIndex])
             for time in np.arange(0.0, 10.0, deltaSim):
                 ship.update(deltaSim)
                 fitness[agentIndex] += ship.getCurrentFitness(goal, asteroids) * deltaSim
@@ -97,12 +95,29 @@ if __name__ == '__main__':
         population = population[indices]
         print("Best fitness: ", fitness[indices[0]])
 
-        # Perform crossover
-        for i in range(1, len(population)):
-            population[i].crossover(population[0])
+        # # Standard single dominant agent crossover (crossover happens with only top agent for all others)
+        # for i in range(1, len(population)):
+        #     population[i].crossover(population[0])
+
+        # Cyclic crossover (each top agent has its own crossover batch further down the list)
+        numParents = int(len(population) / 5)
+        for i in range(numParents, len(population)):
+            population[i].crossover(population[int(len(population) / 5) + 1])
+
+        # # Pairs crossover (1->2, 2->3, etc)
+        # for i in range(len(population)):
+        #     if i % 2 == 1:
+        #         population[i].crossover(population[i - 1])
 
     demoTimer = 0.0
-    demoShip = Ship(population[0])
+    demoShip = Ship(start, population[0])
+
+    demoTrail = np.zeros([int(10.0 / deltaSim), 2])
+    for i in range(0, int(10.0 / deltaSim)):
+        demoShip.update(deltaSim)
+        demoTrail[i] = [float(demoShip.x), float(demoShip.y)]
+
+    demoShip.reset()
 
     # Start the visualization program
     Display(update, deltaSim, [512, 512], "Spaceship Pathfinding - Calvin Weaver / Abhishek Amberkar / Aakash Shukla")

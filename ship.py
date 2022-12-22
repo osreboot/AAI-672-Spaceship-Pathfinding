@@ -4,22 +4,23 @@ from math import *
 
 class Ship:
 
-    def __init__(self, path):
+    def __init__(self, start, path):
         self.radius = 6.0
 
+        self.start = start
         self.path = copy.deepcopy(path)
         self.path.values.sort()
         self.pathInit = copy.deepcopy(self.path)
-        self.x = 50.0
-        self.y = 512.0 - 50.0
+        self.x = self.start[0]
+        self.y = self.start[1]
         self.xs = 0.0
         self.ys = 0.0
         self.dir = 0.0
 
     def reset(self):
         self.path = copy.deepcopy(self.pathInit)
-        self.x = 50.0
-        self.y = 512.0 - 50.0
+        self.x = self.start[0]
+        self.y = self.start[1]
         self.xs = 0.0
         self.ys = 0.0
         self.dir = 0.0

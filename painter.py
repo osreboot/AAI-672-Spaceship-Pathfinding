@@ -52,3 +52,12 @@ def draw_goal(circle):
     for d in range(0, 360, 10):
         glVertex2f(circle.x + cos(radians(d)) * circle.r, circle.y + sin(radians(d)) * circle.r)
     glEnd()
+
+
+def draw_trail(trail, progress):
+    glColor4f(1.0, 0.0, 0.0, 1.0)
+    glBegin(GL_LINES)
+    for i in range(1, progress):
+        glVertex2f(trail[i - 1][0], trail[i - 1][1])
+        glVertex2f(trail[i][0], trail[i][1])
+    glEnd()
