@@ -44,7 +44,8 @@ class Ship:
         self.y += self.ys * delta
 
     # Returns a value representing the fitness of the ship's current state.
-    #   This function should be called once every frame after calling update, and the returned values should be summed
+    #   This function should be called once every frame after calling update, 
+    #   and the returned values should be summed
     #   to produce the total fitness of the ship's assigned path.
     def getCurrentFitness(self, goal, asteroids):
         fitness = 0.0
