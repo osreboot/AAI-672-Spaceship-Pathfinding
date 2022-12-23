@@ -17,7 +17,7 @@ import worlds
 def update(delta):
     global deltaSim, demoTimer, demoShip, demoTrail, goal, asteroids
 
-    # Draw the world
+    # Draw the world i.e goal(end point)
     painter.draw_goal(goal)
     for asteroid in asteroids:
         painter.draw_asteroid(asteroid)
@@ -38,44 +38,23 @@ def update(delta):
 
 
 if __name__ == '__main__':
+
     global deltaSim, demoTimer, demoShip, demoTrail, start, goal, asteroids
     # Creates a test ship with a test (preset) path
+    
+
+    #Creates Start Points, End Points and Obstacles (Asteroids)
+    [start, goal, asteroids] = worlds.world_simple()
+
     #   Path is a 2D array where each element is [time in seconds, boost direction in degrees]
     #   Boosts are executed in order of increasing time values, with the same acceleration for all boosts.
     #   Boosts only apply acceleration, ship speed is cumulative (more realistic).
-    #demoShip = Ship([[0.0, -45],
-    #             [3.5, -100],
-    #             [1.5, 35]])
-
-    [start, goal, asteroids] = worlds.world_simple()
-
-    #pop_size = 20
-    #ga = GA(chr_size = grid_size)
-    #g = ga.genPopulation(min = -5, max = 5,pop_size=pop_size)
-
-    # TODO implement the evolutionary algorithm here
-    #
-    #   The visualization is only for demonstration purposes and we probably shouldn't visualize every single ship.
-    #   Instead, run many generations here behind the scenes and only continue the program after the evolution algorithm
-    #   is fully complete.
-    #
-    #   For every generation:
-    #      1. Generate paths based on the previous generation and some randomness
-    #      2. Create a ship for every path
-    #      3. Loop:
-    #      3a.   Run update(delta) for a while on every ship to let the program simulate ship flight
-    #            ^^^ delta should be around 1/60 here, for a simulation resolution of 60 updates per second
-    #      3b.   Accumulate the values produced by get_fitness for every ship
-    #      3c.   Depending on the above delta, loop for the equivalent of ~5 seconds
-    #            ^^^ (if delta = 1/60 then loop 300 times)
-    #      4. Use the accumulated fitness of each ship to determine the best paths in the generation
-    #
-    #   Lastly assign the main ship to visualize the best path after a bunch of generations!
 
     deltaSim = 1.0 / 20.0
+    population_size = 50
 
     population = []
-    for i in range(50):
+    for i in range(population_size):
         population.append(Path(6))
     population = np.array(population)
 
@@ -119,5 +98,8 @@ if __name__ == '__main__':
 
     demoShip.reset()
 
-    # Start the visualization program
+    #   Start the visualization program
+    #   The visualization is only for demonstration purposes and we did't visualize every single ship.
+    #   Instead, ran many generations here behind the scenes and only visulized the ship after the evolution algorithm
+    #   is fully complete.
     Display(update, deltaSim, [512, 512], "Spaceship Pathfinding - Calvin Weaver / Abhishek Amberkar / Aakash Shukla")
